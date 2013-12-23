@@ -2,11 +2,11 @@
 var config = {};
 
 // Default size of the "stage".
-config.stageX = 800;
-config.stageY = 600;
+config.stageX = window.innerWidth;
+config.stageY = window.innerHeight;
 
 config.stage = {
-	backgroundColor: 'grey'
+	backgroundColor: '#FAEBD7'
 };
 
 // The size of the floor
@@ -17,3 +17,9 @@ config.squareSize = Math.floor(config.stageX / 16);
 
 // Standard buffer between objects.
 config.bufferSize = Math.floor(config.squareSize / 4);
+
+config.strings = {};
+
+
+config.strings.gameTitle = 'Crafty - First Lessons';
+config.strings.gameInstructions = 'W,S,A,D or arrow keys to move.';

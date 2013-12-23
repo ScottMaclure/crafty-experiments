@@ -4,6 +4,14 @@
  * https://kipik.herokuapp.com/lessons
  */
 
+// Track a user clicking on the "player" entity.
+// TODO What about making this a property of the entity?
+var numClicks = 0;
+
+function renderNumClicks() {
+	return 'Number of clicks: ' + numClicks;
+}
+
 // Setup craft's game area.
 // @see http://craftyjs.com/api/Crafty-init.html
 Crafty.init(
@@ -14,7 +22,7 @@ Crafty.init(
 );
 
 // Why do this? Abstraction from DOM/CSS? Or just a shortcut?
-Crafty.background(config.stage.backgroundColor);
+//Crafty.background(config.stage.backgroundColor);
 
 // Create the "floor" for the game, just off the bottom of the "stage".
 Crafty.e('2D, DOM, Color, Floor')
@@ -27,7 +35,7 @@ Crafty.e('2D, DOM, Color, Floor')
 	.color('black');
 
 // Create a square that will hit the floor due to Fourway and Gravity components.
-Crafty.e('2D, DOM, Color, Fourway, Gravity')
+Crafty.e('2D, DOM, Color, Fourway, Gravity, Mouse')
 	.attr({
 	    x: 0 + config.bufferSize,
 	    //y: config.stageY - (config.floorHeight + config.squareSize + config.bufferSize),
@@ -36,4 +44,38 @@ Crafty.e('2D, DOM, Color, Fourway, Gravity')
 	})
 	.color('red')
 	.fourway(8, 4)
-	.gravity('Floor');
+	.gravity('Floor')
+	.bind('Click', function () {
+		numClicks++;
+	});
+
+// Summary display
+Crafty.e('2D, DOM, Text')
+	.attr({
+		x: config.stageX - config.bufferSize - (config.stageX / 4),
+		y: config.bufferSize,
+		w: (config.stageX / 4),
+		h: 50
+	})
+	.text(renderNumClicks())
+	.bind('EnterFrame', function () {
+		this.text(renderNumClicks());
+	});
+
+// Game title and description - ingame!
+Crafty.e('2D, DOM, Text').attr({
+	x: config.bufferSize,
+	y: config.bufferSize,
+	w: config.stageX / 2,
+	h: 50
+})
+.text(config.strings.gameTitle)
+.textFont({ size: '20px', weight: 'bold' });
+
+Crafty.e('2D, DOM, Text').attr({
+	x: config.bufferSize,
+	y: 50,
+	w: config.stageX / 2,
+	h: 50
+})
+.text(config.strings.gameInstructions);
