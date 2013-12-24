@@ -38,8 +38,8 @@ Crafty.e('2D, DOM, Color, Floor')
 Crafty.e('2D, DOM, Color, Twoway, Gravity, Mouse')
 	.attr({
 	    x: 0 + config.bufferSize,
-	    //y: config.stageY - (config.floorHeight + config.squareSize + config.bufferSize),
-	    y: Math.floor(config.stageY / 4),
+	    y: config.stageY - (config.floorHeight + config.squareSize),
+	    //y: Math.floor(config.stageY / 4),
 	    w: config.squareSize, h: config.squareSize
 	})
 	.color('red')
