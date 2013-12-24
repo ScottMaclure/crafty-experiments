@@ -34,8 +34,8 @@ Crafty.e('2D, DOM, Color, Floor')
 	})
 	.color('black');
 
-// Create a square that will hit the floor due to Fourway and Gravity components.
-Crafty.e('2D, DOM, Color, Fourway, Gravity, Mouse')
+// Create our "player" entity. For now, a boring square.
+Crafty.e('2D, DOM, Color, Twoway, Gravity, Mouse')
 	.attr({
 	    x: 0 + config.bufferSize,
 	    //y: config.stageY - (config.floorHeight + config.squareSize + config.bufferSize),
@@ -43,7 +43,7 @@ Crafty.e('2D, DOM, Color, Fourway, Gravity, Mouse')
 	    w: config.squareSize, h: config.squareSize
 	})
 	.color('red')
-	.fourway(8, 4)
+	.twoway(8, 8)
 	.gravity('Floor')
 	.bind('Click', function () {
 		numClicks++;
