@@ -2,6 +2,7 @@
 var config = {};
 
 // Default size of the "stage".
+// These MUST be computed first, everything scales (or should scale) dynamically from there.
 config.stageX = window.innerWidth;
 config.stageY = window.innerHeight;
 
@@ -9,8 +10,8 @@ config.stage = {
 	backgroundColor: '#FAEBD7'
 };
 
-// The size of the floor
-config.floorHeight = 50;
+// The size of a standard "platform", including the floor.
+config.platformHeight = Math.floor(config.stageY / 16);
 
 // Standard size for a "square" in this "game".
 config.squareSize = Math.floor(config.stageX / 16);

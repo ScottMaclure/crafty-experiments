@@ -1,15 +1,34 @@
 /*global Crafty, config*/
 /**
  * Depends on Crafty.js, config.js
- * https://kipik.herokuapp.com/lessons
+ * @see http://kipik.herokuapp.com/lessons
+ * @see http://craftyjs.com/api/
  */
 
 // Track a user clicking on the "player" entity.
 // TODO What about making this a property of the entity?
 var numClicks = 0;
 
+/**
+ * @return {string} Standard display text for the user clicking the player entity.
+ */
 function renderNumClicks() {
 	return 'Number of clicks: ' + numClicks;
+}
+
+/**
+ * Aware of dynamic stage size.
+ */
+function getPlayerMoveSpeed() {
+	return Math.floor(config.stageX / 100);
+}
+
+/**
+ * Aware of dynamic stage size.
+ */
+function getPlayerJumpSpeed() {
+	var base = Math.floor(config.stageY / 100);
+	return base + Math.floor(base / 4);
 }
 
 // Setup craft's game area.
@@ -24,13 +43,14 @@ Crafty.init(
 // Why do this? Abstraction from DOM/CSS? Or just a shortcut?
 //Crafty.background(config.stage.backgroundColor);
 
-// Create the "floor" for the game, just off the bottom of the "stage".
-Crafty.e('2D, DOM, Color, Floor')
+// Create the "Platform" for the game, just off the bottom of the "stage".
+// Works in conjunction with gravity.
+Crafty.e('2D, DOM, Color, Platform')
 	.attr({
 	    x: 0,
-	    y: config.stageY - config.floorHeight,
+	    y: config.stageY - config.platformHeight,
 	    w: config.stageX,
-	    h: config.floorHeight,
+	    h: config.platformHeight,
 	})
 	.color('black');
 
@@ -38,13 +58,13 @@ Crafty.e('2D, DOM, Color, Floor')
 Crafty.e('2D, DOM, Color, Twoway, Gravity, Mouse')
 	.attr({
 	    x: 0 + config.bufferSize,
-	    y: config.stageY - (config.floorHeight + config.squareSize),
-	    //y: Math.floor(config.stageY / 4),
+	    y: config.stageY - (config.platformHeight + config.squareSize),
 	    w: config.squareSize, h: config.squareSize
 	})
 	.color('red')
-	.twoway(8, 8)
-	.gravity('Floor')
+	// TODO How do I compute the jump height dynamically, depending on stageX?
+	.twoway(getPlayerMoveSpeed(), getPlayerJumpSpeed())
+	.gravity('Platform')
 	.bind('Click', function () {
 		numClicks++;
 	});
@@ -71,7 +91,7 @@ Crafty.e('2D, DOM, Text').attr({
 })
 .text(config.strings.gameTitle)
 .textFont({ size: '20px', weight: 'bold' });
-
+// And desc
 Crafty.e('2D, DOM, Text').attr({
 	x: config.bufferSize,
 	y: 50,
@@ -79,3 +99,15 @@ Crafty.e('2D, DOM, Text').attr({
 	h: 50
 })
 .text(config.strings.gameInstructions);
+
+// Create another "Platform" entity, that our player can jump up onto.
+var entityWidth = Math.floor(config.stageX / 4);
+var entityYPos = Math.floor(config.stageY / 4);
+Crafty.e('2D, DOM, Color, Platform')
+	.attr({
+	    x: config.stageX - entityWidth,
+	    y: config.stageY - entityYPos,
+	    w: entityWidth,
+	    h: 20,
+	})
+	.color('black');
